@@ -48,7 +48,7 @@ class Logger:
         file = open(self.name, "x")                                 # Creates the scan log text file
         # Writes some header data to the text file
         file.write("IoT Toolkit - Security Scan")
-        file.write("\nDate = " + datetime.today().strftime("%m/%d/%y"))
+        file.write("\nDate = " + datetime.today().strftime("%d/%m/%y"))
         file.write("\nStart Time = " + get_current_time())
         file.write("\n")
 
