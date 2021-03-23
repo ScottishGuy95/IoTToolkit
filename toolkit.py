@@ -51,6 +51,7 @@ def main():
     ports_found = False
     credentials_found = False
     encryption_found = False
+    durations = []
 
     print(toolkit_title)
     # Ping Sweep
@@ -89,6 +90,7 @@ def main():
         log.write_to_file("IP: " + host + "\tHostname: " + ping.get_hostname(host) + "\tVendor: " + ping.get_vendor(
             host) + "\tMAC: " + ping.get_mac(host))
     log.write_to_file("Total devices found: " + str(ping.total_hosts))
+    durations.append(ping.get_scan_time())  # Adds scan duration to list for overview section
     log.write_to_file("Ping sweep scan time: " + str(ping.get_scan_time()) + "s")
 
     # Port Scanner
@@ -108,6 +110,7 @@ def main():
         # Used to check if any ports were found, used later for mitigations
         if len(port.get_hosts_ports(host)) >= 1:
             ports_found = True
+    durations.append(port.get_scan_time())  # Adds scan duration to list for overview section
     log.write_to_file("Port scan scan time: " + str(port.get_scan_time()) + "s")
     print('Port scan results have been logged')
 
@@ -116,9 +119,9 @@ def main():
     print('\nStarting the Credential scans - HTTP Basic Authentication, FTP and TELNET')
     print('NOTE: Running this scan multiple time on the same devices may return different successful usernames '
           'and passwords. This would mean that your device can be logged in either:\nwithout any credentials or with a'
-          'range of weak credentials or with any credentials, all of which means it is insecure. ')
+          ' range of weak credentials or with any credentials, all of which means it is insecure. ')
     print('\nStarting a HTTP scan to test for weak credentials on the ' + str(ping.total_hosts) + ' devices found. '
-          'Please wait...')
+                                                                                                  'Please wait...')
     log.write_to_file('\nCredential Scans')
     log.write_to_file('HTTP Basic Authentication Results')
     credHTTP = CredentialsHTTP()
@@ -136,6 +139,7 @@ def main():
     # Checks if any devices had weak credentials, used later for mitigations
     if credHTTP.get_total_weak_hosts() >= 1:
         credentials_found = True
+    durations.append(credHTTP.get_scan_time())  # Adds scan duration to list for overview section
     log.write_to_file("HTTP Basic Authentication scan time: " + str(credHTTP.get_scan_time()) + "s")
 
     # Get a list of hosts that had the FTP port open
@@ -159,6 +163,7 @@ def main():
     # Checks if any devices had weak credentials, used later for mitigations
     if credFTP.get_total_weak_hosts() >= 1:
         credentials_found = True
+    durations.append(credFTP.get_scan_time())  # Adds scan duration to list for overview section
     log.write_to_file("FTP scan time: " + str(credFTP.get_scan_time()) + "s")
 
     # Gets a list of hosts that have the TELNET port open
@@ -182,6 +187,7 @@ def main():
     # Checks if any devices made use of weak credentials, used later for mitigations
     if credTELNET.get_total_weak_hosts() >= 1:
         credentials_found = True
+    durations.append(credTELNET.get_scan_time())  # Adds scan duration to list for overview section
     log.write_to_file("TELNET scan time: " + str(credTELNET.get_scan_time()) + "s\n")
     print('Credential scan results have been logged')
 
@@ -205,6 +211,20 @@ def main():
     print('\nGeneral Cyber Security Tips')
     for msg in mitigations.get_random_messages('general'):
         print('* ' + msg)
+
+    # Overview section
+    # Used to give the user a quick overview of the scan results
+    log.write_to_file("Overview Section")
+    log.write_to_file("Ping Sweep results: " + str(ping.total_hosts) + "\tDuration: " + str(durations[0]))
+    log.write_to_file("Number of devices checked for open ports: " + str(len(port.get_hosts())) + "\tDuration: " +
+                      str(durations[1]))
+    log.write_to_file("Number of devices checked for HTTP login: " + str(len(credHTTP.get_hosts_only())) + "\tFound: " +
+                      str(credHTTP.get_total_weak_hosts()) + "\tDuration: " + str(durations[2]))
+    log.write_to_file("Number of devices checked for FTP login: " + str(len(credFTP.get_hosts_only())) + "\tFound: " +
+                      str(credFTP.get_total_weak_hosts()) + "\tDuration: " + str(durations[3]))
+    log.write_to_file("Number of devices checked for TELNET login: " + str(len(credTELNET.get_hosts_only())) +
+                      "\tFound: " + str(credTELNET.get_total_weak_hosts()) + "\tDuration: " +
+                      str(durations[4]) + "\n")
 
 
 if __name__ == "__main__":
