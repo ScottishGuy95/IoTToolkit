@@ -32,6 +32,8 @@ class CredentialsFTP(Parent):
             pass
         except ConnectionRefusedError:
             pass
+        except EOFError:
+            pass
 
     def get_weak_hosts(self):
         """

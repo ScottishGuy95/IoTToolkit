@@ -220,9 +220,9 @@ def main():
                       str(durations[1]))
     log.write_to_file("Number of devices checked for HTTP login: " + str(len(credHTTP.get_hosts_only())) + "\tFound: " +
                       str(credHTTP.get_total_weak_hosts()) + "\tDuration: " + str(durations[2]))
-    log.write_to_file("Number of devices checked for FTP login: " + str(len(credFTP.get_hosts_only())) + "\tFound: " +
+    log.write_to_file("Number of devices checked for FTP login: " + str(len(list_FTP_hosts)) + "\tFound: " +
                       str(credFTP.get_total_weak_hosts()) + "\tDuration: " + str(durations[3]))
-    log.write_to_file("Number of devices checked for TELNET login: " + str(len(credTELNET.get_hosts_only())) +
+    log.write_to_file("Number of devices checked for TELNET login: " + str(len(list_TELNET_hosts)) +
                       "\tFound: " + str(credTELNET.get_total_weak_hosts()) + "\tDuration: " +
                       str(durations[4]) + "\n")
 
