@@ -52,12 +52,15 @@ class PortScan:
         Creates and manages the threads that help improve the port scan speed
         """
         # Start 100 threads that will run the port scans
-        for x in range(100):
-            # Call the threader, then class them as daemon
-            # to ensure program does not end until threads are done
-            t = threading.Thread(target=self.threader)
-            t.daemon = True
-            t.start()
+        try:
+            for x in range(100):
+                # Call the threader, then class them as daemon
+                # to ensure program does not end until threads are done
+                t = threading.Thread(target=self.threader)
+                t.daemon = True
+                t.start()
+        except RuntimeError:
+            pass
 
         # Add the ports to our Queue
         for worker in range(1, 1000):
@@ -116,4 +119,19 @@ class PortScan:
         return contains_port
 
     def get_scan_time(self):
+        """
+        Gets the duration from now since the object was created
+        Used to get the total duration of the Port Scan in seconds
+        :return: (str) The duration in seconds
+        """
         return str(round(time.time() - self.start_time))
+
+    def get_total_ports(self):
+        """
+        Gets the total ports detected from all hosts
+        :return: (int) The number of ports detected from the entire port scan
+        """
+        total = 0
+        for x in self.open_ports.values():
+            total += len(x)
+        return total

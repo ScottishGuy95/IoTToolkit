@@ -27,6 +27,7 @@ class CredentialsFTP(Parent):
             # Checks if the device returned a message
             if "successful" in str(ftp.getwelcome()):
                 self.weak_hosts[self.current_host] = [220, self.current_user, password]
+            ftp.close()
             pass
         except socket.timeout:
             pass
