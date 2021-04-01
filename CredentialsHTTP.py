@@ -73,10 +73,16 @@ class CredentialsHTTP(Parent):
         :return: (lst) A list of IP addresses
         """
         weak = []
-        for host in self.get_hosts_only():
-            # Checks if the host had a successful login at all
-            if self.get_host_code(host) == 200 or self.get_host_code(host)[0] == 200:
-                weak.append(host)
+        try:
+            print(self.get_codes_only())
+            for host in self.get_hosts_only():
+                # Checks if the host had a successful login at all
+                result = self.get_host_code(host)
+                print(result)
+                if result[0] == 200 or result[0][0] == 200:
+                    weak.append(host)
+        except TypeError:
+            pass
         return weak
 
     def get_host_code(self, host):
@@ -85,7 +91,7 @@ class CredentialsHTTP(Parent):
         :param host: (str) The IP address of a device on the network
         :return: (int) The HTTP code
         """
-        return self.weak_hosts.get(host)[0]
+        return self.weak_hosts.get(host)
 
     def get_weak_username(self, host):
         """
