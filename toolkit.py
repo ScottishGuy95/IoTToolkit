@@ -233,5 +233,7 @@ if __name__ == "__main__":
         print("\nScan results saved to file: " + log.get_filename())
         log.end()
     except KeyboardInterrupt:
-        print('\nUser has cancelled the program - Ending scan\nThank you for using the IoT Toolkit!')
+        log.write_to_file("Scan was canceled by the user.\n")
+        log.end()
+        print('\n\nUser has cancelled the program - Ending scan\nThank you for using the IoT Toolkit!')
         sys.exit()
