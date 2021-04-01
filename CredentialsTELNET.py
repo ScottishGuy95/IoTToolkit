@@ -48,10 +48,13 @@ class CredentialsTELNET(Parent):
         :return: (lst) A list of hosts with weak TELNET credentials
         """
         weak = []
-        for host in self.get_hosts_only():
-            # Checks for the response result against each host in the dictionary
-            if self.get_TELNET_result(host) == 220:
-                weak.append(host)
+        try:
+            for host in self.get_hosts_only():
+                # Checks for the response result against each host in the dictionary
+                if self.get_TELNET_result(host) == 220:
+                    weak.append(host)
+        except TypeError:
+            pass
         return weak
 
     def get_TELNET_result(self, host):

@@ -42,10 +42,13 @@ class CredentialsFTP(Parent):
         :return: (lst) A list of hosts with weak FTP credentials
         """
         weak = []
-        for host in self.get_hosts_only():
-            # Checks for the success code against each host in the dictionary
-            if self.get_ftp_code(host) == 220 or self.get_ftp_code(host)[0] == 220:
-                weak.append(host)
+        try:
+            for host in self.get_hosts_only():
+                # Checks for the success code against each host in the dictionary
+                if self.get_ftp_code(host) == 220:
+                    weak.append(host)
+        except TypeError:
+            pass
         return weak
 
     def get_ftp_code(self, host):
