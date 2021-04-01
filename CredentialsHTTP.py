@@ -74,11 +74,9 @@ class CredentialsHTTP(Parent):
         """
         weak = []
         try:
-            print(self.get_codes_only())
             for host in self.get_hosts_only():
                 # Checks if the host had a successful login at all
                 result = self.get_host_code(host)
-                print(result)
                 if result[0] == 200 or result[0][0] == 200:
                     weak.append(host)
         except TypeError:
