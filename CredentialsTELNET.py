@@ -22,12 +22,17 @@ class CredentialsTELNET(Parent):
         :param password: (str) The password that should be used to brute force a login on the TELNET service
         """
         try:
+            # Create the telnet object with the current host device
             tn = telnetlib.Telnet(host=self.current_host, timeout=0.5)
+            # Send the username details to the device
             tn.read_until(b'login: ', timeout=0.5)
             tn.write((self.current_user + "\r").encode('utf-8'))
+            # If a password is supplied, pass the password to the device
             if password:
                 tn.read_until(b"Password: ", timeout=0.5)
                 tn.write((password + "\r").encode('utf-8'))
+            # Check for a valid connection from the supplied list of responses
+            # Logging any successful connections in weak_hosts
             num, match, prev = tn.expect([b'Incorrect', b'Welcome'])
             if num == 1:
                 self.weak_hosts[self.current_host] = [220, self.current_user, password]

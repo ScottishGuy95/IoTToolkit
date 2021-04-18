@@ -62,7 +62,7 @@ class Logger:
     def write_to_file(self, data):
         """
         Takes a string of data to add to the text file
-        :param data: (str) The data that is to be added
+        :param data: (str) The data to add to the log file
         """
         file = open(self.name, "a", encoding='utf-8')
         file.write("\n" + data)
